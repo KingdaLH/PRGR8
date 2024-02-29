@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Game Interface</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container container rounded-lg bg-light p-4">
+    <h2 class="mt-5 mb-4">Card Game Interface</h2>
+    <div class="card p-4 mb-4">
+        <h5 class="mb-3">Input Form</h5>
+        <form id="textInputForm">
+            <div class="form-group">
+                <label for="userInput">Enter your text:</label>
+                <input type="text" class="form-control" id="userInput" placeholder="Enter text here">
+            </div>
+            <button type="button" class="btn btn-primary" id="submitButton" onclick="sendInput()">Send</button>
+        </form>
+        <div id="loaderDiv" class="loader mt-4" style="display: none;"></div>
+    </div>
+    <div class="card p-4">
+        <h5 class="mb-3">Response</h5>
+        <div id="responseDiv"></div>
+        <div id="messageHistoryDiv">
+    </div>
+</div>
+
+<div class="card p-4">
+    <div class="card-header">
+        Powered by GPT-3.5 turbo
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <p>"The rise of powerful AI will be either the best or the worst thing ever to happen to humanity. We do not
+                yet know which."</p>
+            <footer class="blockquote-footer">GPT3.5's suggested quote on AI by <cite title="Source Title">Stephen
+                Hawking</cite></footer>
+        </blockquote>
+    </div>
+</div>
+
+</body>
+<footer>
+    <script src="index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</footer>
+</html>
+
