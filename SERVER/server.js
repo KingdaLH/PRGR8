@@ -1,7 +1,6 @@
 import express from "express";
 import cors from 'cors';
 import { ChatOpenAI } from "@langchain/openai";
-import { ChatMessageHistory } from "@langchain/community/stores/message/in_memory";
 
 console.log("hello world");
 console.log(process.env.AZURE_OPENAI_API_KEY);
@@ -18,9 +17,9 @@ const model = new ChatOpenAI({
     azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
     azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
     azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
+    temperature: 0.7,
+    maxTokens: 100,
 });
-
-const messageHistory = new ChatMessageHistory();
 
 app.get("/test", async (req, res) => {
     res.json({});
@@ -32,20 +31,18 @@ app.get("/joke", async (req, res) => {
 });
 
 app.post("/chat", async (req, res) => {
-    console.log("chat");
-    let engineeredPrompt = `You are a gamer cat that loves to meow every sentence. Answer the following question: ${req.body.prompt}`;
+    let stringifiedPrompt = JSON.stringify(req.body.prompt);
+    let engineeredPrompt = `You are a gamer cat that loves to meow every sentence. Answer the following question: ${stringifiedPrompt}`;
+    console.log(req.body.prompt);
+    console.log(engineeredPrompt);
     const chat = await Chatter(engineeredPrompt);
-    await messageHistory.addMessage(req.body.prompt);
-    await messageHistory.addMessage(chat.content);
-    res.json({ content: chat.content, messageHistory: messageHistory.getMessages() });
+
+    res.json(chat.content);
 });
 
 async function Chatter(prompt) {
 
-    return await model.invoke(prompt, {
-        temperature: 2.0,
-        maxTokens: 100,
-    });
+    return await model.invoke(prompt);
 };
 
 app.listen(port, () => {
