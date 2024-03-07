@@ -11,13 +11,9 @@ function sendInput() {
     loaderDiv.style.display = 'inline-block';
     textInputForm.style.display = 'none';
 
-    // let stringInput = JSON.stringify(userInput);
     console.log(userInput);
     history.push({"human": userInput})
-    // let historyString = JSON.stringify(history);
-     console.log(history);
-
-    const promptString = `{ prompt: ${JSON.stringify(history) }}`
+    console.log(history);
 
 
     fetch('http://localhost:8000/chat', {
@@ -31,14 +27,12 @@ function sendInput() {
         }).then(async data => {
             console.log('Input sent successfully:', data);
 
-            await addResponse(data);
+            await addResponse(data, userInput);
 
             submitButton.disabled = false;
             loaderDiv.style.display = 'none';
             textInputForm.style.display = 'block';
 
-            // let stringData = JSON.stringify(data.content);
-            // console.log(stringData);
             history.push({"assistant": data});
 
         })
@@ -50,14 +44,21 @@ function sendInput() {
             textInputForm.style.display = 'block';
         });
 }
-async function addResponse(data) {
+async function addResponse(data, userInput) {
     const newText = document.createElement("p");
-    const newContent = document.createTextNode(data);
+    const newText2 = document.createElement("p");
+    const newContent = document.createTextNode(userInput);
 
     newText.appendChild(newContent);
 
+    const newContent2 = document.createTextNode(data);
+
+    newText2.appendChild(newContent2);
+
     const currentDiv = document.getElementById("responseDiv");
 
-    currentDiv.innerHTML = '';
-    currentDiv.appendChild(newText);
+    //currentDiv.innerHTML = '';
+
+    currentDiv.prepend(newText);
+    currentDiv.prepend(newText2);
 }

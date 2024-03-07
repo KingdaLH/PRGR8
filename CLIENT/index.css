@@ -6,7 +6,17 @@
     padding: 10px;
     background-color: #f9f9f9;
   }
-  
+
+.p {
+    margin: 0;
+    color: #007bff;
+    background-color: grey;
+  }
+
+  .chat-box {
+    height: 300px;
+    overflow-y: scroll;
+}
   .message-container {
     margin-bottom: 10px;
     padding: 5px 10px;
