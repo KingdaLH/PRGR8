@@ -39,7 +39,7 @@ function sendInput() {
 
             // let stringData = JSON.stringify(data.content);
             // console.log(stringData);
-            history.push({"Ai": data});
+            history.push({"assistant": data});
 
         })
         .catch(error => {
