@@ -6,32 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Game Interface</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="index.css" rel="stylesheet">
+    <link href="./index.css" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="container container rounded-lg bg-light p-4">
+<div class="container rounded-lg bg-info p-4">
     <h2 class="mt-5 mb-4">Card Game Interface</h2>
     <div class="card p-4 mb-4">
-        <h5 class="mb-3">Input Form</h5>
         <form id="textInputForm">
             <div class="form-group">
                 <label for="userInput">Enter your text:</label>
                 <input type="text" class="form-control" id="userInput" placeholder="Enter text here">
             </div>
             <button type="button" class="btn btn-primary" id="submitButton" onclick="sendInput()">Send</button>
+            <button type="button" class="btn btn-primary" id="cancelButton" onclick="cancelChat()">Cancel</button>
         </form>
         <div id="loaderDiv" class="loader mt-4" style="display: none;"></div>
     </div>
     <div class="card p-4">
-        <h5 class="mb-3">Response</h5>
+        <h5 class="mb-3">Chat</h5>
         <div id="responseDiv"></div>
         <div id="messageHistoryDiv">
     </div>
 </div>
 
-<div class="card p-4">
+<div class="card bg-pink p-4">
     <div class="card-header">
         Powered by GPT-3.5 turbo
     </div>

@@ -45,20 +45,31 @@ function sendInput() {
         });
 }
 async function addResponse(data, userInput) {
-    const newText = document.createElement("p");
-    const newText2 = document.createElement("p");
-    const newContent = document.createTextNode(userInput);
-
-    newText.appendChild(newContent);
-
-    const newContent2 = document.createTextNode(data);
-
-    newText2.appendChild(newContent2);
-
     const currentDiv = document.getElementById("responseDiv");
 
-    //currentDiv.innerHTML = '';
+    const bubbleWrapper = document.createElement("div");
+    bubbleWrapper.classList.add("conversation-bubble");
 
-    currentDiv.prepend(newText);
-    currentDiv.prepend(newText2);
+    const userBubble = document.createElement("div");
+    userBubble.classList.add("user-bubble");
+    const userContent = document.createTextNode(userInput);
+    userBubble.appendChild(userContent);
+
+    const assistantBubble = document.createElement("div");
+    assistantBubble.classList.add("assistant-bubble");
+    const assistantContent = document.createTextNode(data);
+    assistantBubble.appendChild(assistantContent);
+
+    bubbleWrapper.appendChild(assistantBubble)
+    bubbleWrapper.appendChild(userBubble);
+
+    currentDiv.prepend(bubbleWrapper);
+
+}
+
+function cancelChat() {
+    fetch('http://localhost:8000/cancel')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error fetching test:', error));
 }

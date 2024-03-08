@@ -16,6 +16,8 @@ app.use(cors()); // Enable CORS
 
 app.use(express.json());
 
+const controller = new AbortController();
+
 const model = new ChatOpenAI({
     azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
     azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
@@ -23,6 +25,7 @@ const model = new ChatOpenAI({
     azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
     temperature: 0.7,
     maxTokens: 100,
+    signal: controller.signal
 });
 
 async function drawCard(url) {
@@ -33,25 +36,31 @@ async function drawCard(url) {
     return dataValue;
 }
 
-app.get("/test", async (req, res) => {
-    res.json({});
-});
+//TODO create second api call for cat card and add an extra button to the frontend to call it. Uses just heart cards and cat voice,
+// gets the deck from the api and then shuffles it and seperate fetch for drawing using that id
+// Need to add voice recognition and cancel call, put everything online, add embed maybe, research different llm
 
-app.get("/joke", async (req, res) => {
-    const chat = await JokeTeller("Tell me a very funny joke about a banana.");
-    res.json(chat.content);
-});
+async function drawCuteCard(url) {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data.cards);
+    const dataValue = data.cards[0];
+    return dataValue;
+
+}
 
 app.post("/chat", async (req, res) => {
     stringifiedPrompt = JSON.stringify(req.body.prompt);
 
-
     const assistantCard = await drawCard("https://www.deckofcardsapi.com/api/deck/new/draw/?count=1");
     const humanCard = await drawCard("https://www.deckofcardsapi.com/api/deck/new/draw/?count=1");
+    const catCard = await drawCuteCard("https://www.deckofcardsapi.com/api/deck/new/shuffle/?cards=AH,2H,3H,4H,5H,6H,7H,8H,9C,10H,JH,QH,KH");
+    const assistantCatcard = await drawCuteCard("https://www.deckofcardsapi.com/api/deck/new/shuffle/?cards=AH,2H,3H,4H,5H,6H,7H,8H,9C,10H,JH,QH,KH")
 
     let winner;
-    console.log("Assistant card: ", assistantCard);
-    console.log("Human card: ", humanCard);
+    console.log("Assistant card: ", catCard);
+    console.log("Human card: ", assistantCatcard);
+
     if (assistantCard > humanCard) {
         winner = "Assistant";
     } else if (assistantCard < humanCard) {
@@ -80,6 +89,11 @@ app.post("/chat", async (req, res) => {
     const chat = await Chatter(engineeredPrompt);
 
     res.json(chat.content);
+});
+
+app.get("/cancel", async (req, res) => {
+    controller.abort();
+    res.json({});
 });
 
 async function Chatter(engineeredPrompt) {
