@@ -1,13 +1,22 @@
 let history = [];
+let controller = new AbortController();
 
-function sendInput() {
+function sendInput(action) {
+
+    const signal = controller.signal;
+
     const userInput = document.getElementById('userInput').value;
 
     const loaderDiv = document.getElementById('loaderDiv');
     const submitButton = document.getElementById('submitButton');
+    const catButton = document.getElementById('catButton');
+    const cancelButton = document.getElementById('cancelButton');
     const textInputForm = document.getElementById('textInputForm');
 
+    catButton.disabled = true;
     submitButton.disabled = true;
+    cancelButton.style.display = 'inline-block';
+
     loaderDiv.style.display = 'inline-block';
     textInputForm.style.display = 'none';
 
@@ -15,13 +24,24 @@ function sendInput() {
     history.push({"human": userInput})
     console.log(history);
 
+    let fetchUrl;
+    let catBool;
 
-    fetch('http://localhost:8000/chat', {
+    if (action === 'cat') {
+        fetchUrl = 'http://localhost:8000/cat';
+        catBool = true
+    }else {
+        fetchUrl = 'http://localhost:8000/chat';
+        catBool = false;
+    }
+
+    fetch(fetchUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt: history })
+        body: JSON.stringify({ prompt: history }),
+        signal: signal,
     })
         .then(async response => { return response.json();
         }).then(async data => {
@@ -29,7 +49,15 @@ function sendInput() {
 
             await addResponse(data, userInput);
 
-            submitButton.disabled = false;
+            if (catBool === true) {
+                submitButton.disabled = true;
+                catButton.disabled = false;
+            }else{
+                catButton.disabled = true;
+                submitButton.disabled = false;
+            }
+
+            cancelButton.style.display = 'none';
             loaderDiv.style.display = 'none';
             textInputForm.style.display = 'block';
 
@@ -39,12 +67,15 @@ function sendInput() {
         .catch(error => {
             console.error('Error sending input:', error);
 
-            submitButton.disabled = false;
+            cancelButton.style.display = 'none';
             loaderDiv.style.display = 'none';
             textInputForm.style.display = 'block';
         });
 }
+
 async function addResponse(data, userInput) {
+
+
     const currentDiv = document.getElementById("responseDiv");
 
     const bubbleWrapper = document.createElement("div");

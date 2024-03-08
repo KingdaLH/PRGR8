@@ -19,10 +19,11 @@
                 <label for="userInput">Enter your text:</label>
                 <input type="text" class="form-control" id="userInput" placeholder="Enter text here">
             </div>
-            <button type="button" class="btn btn-primary" id="submitButton" onclick="sendInput()">Send</button>
-            <button type="button" class="btn btn-primary" id="cancelButton" onclick="cancelChat()">Cancel</button>
+            <button type="button" class="btn btn-success" id="submitButton" onclick="sendInput()">Chat</button>
+            <button type="button" class="btn btn-success" id="catButton" onclick="sendInput('cat')">Cat</button>
         </form>
         <div id="loaderDiv" class="loader mt-4" style="display: none;"></div>
+        <button type="button" class="btn btn-danger" id="cancelButton" style ="display: none;" onclick="cancelChat()">Cancel</button>
     </div>
     <div class="card p-4">
         <h5 class="mb-3">Chat</h5>
