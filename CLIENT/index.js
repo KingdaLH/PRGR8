@@ -3,10 +3,12 @@ let controller = new AbortController();
 
 let fetchUrl;
 let catBool;
+let karenBool;
 
 const submitButton = document.getElementById('submitButton');
 const catButton = document.getElementById('catButton');
 const cancelButton = document.getElementById('cancelButton');
+const karenButton = document.getElementById('karenButton');
 
 function sendInput(action) {
     controller = new AbortController();
@@ -31,8 +33,14 @@ function sendInput(action) {
 
     if (action === 'cat') {
         fetchUrl = 'http://localhost:8000/cat';
-        catBool = true
-    }else {
+        catBool = true;
+    }
+    else if (action === 'karen')
+    {
+        fetchUrl = 'http://localhost:8000/karen';
+        karenBool = true
+    }
+    else {
         fetchUrl = 'http://localhost:8000/chat';
         catBool = false;
     }
@@ -77,7 +85,6 @@ function sendInput(action) {
 
 async function addResponse(data, userInput) {
 
-
     const currentDiv = document.getElementById("responseDiv");
 
     const bubbleWrapper = document.createElement("div");
@@ -103,11 +110,23 @@ async function addResponse(data, userInput) {
 function cancelChat() {
 
     if (catBool === true) {
+
         submitButton.disabled = true;
         catButton.disabled = false;
-    }else{
+        karenButton.disabled = true;
+    }
+    else if (karenBool === true){
+
+        submitButton.disabled = false;
+        catButton.disabled = true ;
+        karenButton.disabled = false;
+
+    }
+    else {
+
         catButton.disabled = true;
         submitButton.disabled = false;
+        karenButton.disabled = true;
     }
 
     controller.abort("Request cancelled by user");

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from 'cors';
 import { ChatOpenAI } from "@langchain/openai";
-
+import {ChatAnthropic,} from "@langchain/anthropic";
 console.log("hello world");
 console.log(process.env.AZURE_OPENAI_API_KEY);
 
@@ -26,6 +26,11 @@ const model = new ChatOpenAI({
     maxTokens: 100,
     signal: controller.signal,
     maxRetries: 10,
+});
+
+const modelAnthropic = new ChatAnthropic({
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    modelName: "claude-3-sonnet-20240229",
 });
 
 async function shuffleDeck(url) {
@@ -85,6 +90,27 @@ app.post("/chat", async (req, res) => {
     res.json(chat.content);
 });
 
+app.post("/karen", async (req, res) => {
+
+    let karenMessages = [];
+    stringifiedPrompt = JSON.stringify(req.body.prompt);
+    karenMessages.push({"role":"user", "content": stringifiedPrompt});
+
+    const deckId = await shuffleDeck("https://www.deckofcardsapi.com/api/deck/new/shuffle/?cards=AS,2S,KS,AD,2D,KD,AC,2C,KC,AH,2H,KH");
+    const karen = `You are a karen, you are very entitled and you are always right. You are very rude and you are always asking to speak to the manager.`;
+
+    const karenCard = await drawCard(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`);
+    const humanCard = await drawCard(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`);
+
+    console.log(karenMessages)
+
+    let gamePrompt = await game(karenCard, humanCard, karen);
+
+    const chat = await Chatter2(gamePrompt);
+
+    res.json(chat.content);
+});
+
 async function game(assistantCard, humanCard, personality) {
 
     let winner;
@@ -121,6 +147,14 @@ async function Chatter(engineeredPrompt) {
     return await model.invoke([
         ["system", engineeredPrompt],
         ["human", stringifiedPrompt],
+    ]);
+};
+
+async function Chatter2(engineeredPrompt) {
+
+    return await modelAnthropic.invoke([
+        ["system", engineeredPrompt],
+        ["user", stringifiedPrompt],
     ]);
 };
 
