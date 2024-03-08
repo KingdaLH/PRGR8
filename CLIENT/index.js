@@ -1,16 +1,21 @@
 let history = [];
 let controller = new AbortController();
 
-function sendInput(action) {
+let fetchUrl;
+let catBool;
 
+const submitButton = document.getElementById('submitButton');
+const catButton = document.getElementById('catButton');
+const cancelButton = document.getElementById('cancelButton');
+
+function sendInput(action) {
+    controller = new AbortController();
     const signal = controller.signal;
 
     const userInput = document.getElementById('userInput').value;
 
     const loaderDiv = document.getElementById('loaderDiv');
-    const submitButton = document.getElementById('submitButton');
-    const catButton = document.getElementById('catButton');
-    const cancelButton = document.getElementById('cancelButton');
+
     const textInputForm = document.getElementById('textInputForm');
 
     catButton.disabled = true;
@@ -23,9 +28,6 @@ function sendInput(action) {
     console.log(userInput);
     history.push({"human": userInput})
     console.log(history);
-
-    let fetchUrl;
-    let catBool;
 
     if (action === 'cat') {
         fetchUrl = 'http://localhost:8000/cat';
@@ -99,8 +101,14 @@ async function addResponse(data, userInput) {
 }
 
 function cancelChat() {
-    fetch('http://localhost:8000/cancel')
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error fetching test:', error));
+
+    if (catBool === true) {
+        submitButton.disabled = true;
+        catButton.disabled = false;
+    }else{
+        catButton.disabled = true;
+        submitButton.disabled = false;
+    }
+
+    controller.abort("Request cancelled by user");
 }

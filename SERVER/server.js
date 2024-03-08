@@ -24,7 +24,8 @@ const model = new ChatOpenAI({
     azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
     temperature: 0.7,
     maxTokens: 100,
-    signal: controller.signal
+    signal: controller.signal,
+    maxRetries: 10,
 });
 
 async function shuffleDeck(url) {
@@ -114,16 +115,6 @@ async function game(assistantCard, humanCard, personality) {
 
     return engineeredPrompt
 }
-
-app.get("/cancel", async (req, res) => {
-    try {
-        controller.abort();
-        res.json({ message: "Request cancelled" });
-    } catch (err) {
-        console.error('AbortError:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 async function Chatter(engineeredPrompt) {
 
