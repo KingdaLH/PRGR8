@@ -17,12 +17,15 @@
         <form id="textInputForm">
             <div class="form-group">
                 <label for="userInput">Enter your text:</label>
+                <button type="button" class="btn btn-primary" id="startButton" onclick="startSpeechRecognition()">Voice</button>
                 <input type="text" class="form-control" id="userInput" placeholder="Enter text here">
             </div>
             <button type="button" class="btn btn-success" id="submitButton" onclick="sendInput()">Chat</button>
             <button type="button" class="btn btn-success" id="catButton" onclick="sendInput('cat')">Cat</button>
             <button type="button" class="btn btn-success" id="karenButton" onclick="sendInput('karen')">Karen</button>
+            <button type="button" class="btn btn-success" id="daveButton" onclick="sendInput('dave')">Dave</button>
         </form>
+        <button type="button" class="btn btn-danger" id="clearButton" onclick="clearHistory()">Clear</button>
         <div id="loaderDiv" class="loader mt-4" style="display: none;"></div>
         <button type="button" class="btn btn-danger" id="cancelButton" style ="display: none;" onclick="cancelChat()">Cancel</button>
     </div>
@@ -35,7 +38,7 @@
 
 <div class="card bg-pink p-4">
     <div class="card-header">
-        Powered by GPT-3.5 turbo
+        Powered by GPT-3.5 turbo and Anthropic AI
     </div>
     <div class="card-body">
         <blockquote class="blockquote mb-0">
@@ -50,6 +53,7 @@
 </body>
 <footer>
     <script src="index.js"></script>
+    <script src="speechhandler.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>

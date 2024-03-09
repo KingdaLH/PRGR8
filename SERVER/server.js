@@ -111,6 +111,27 @@ app.post("/karen", async (req, res) => {
     res.json(chat.content);
 });
 
+app.post("/dave", async (req, res) => {
+
+    let daveMessages = [];
+    stringifiedPrompt = JSON.stringify(req.body.prompt);
+    daveMessages.push({"role":"user", "content": stringifiedPrompt});
+
+    const deckId = await shuffleDeck("https://www.deckofcardsapi.com/api/deck/new/shuffle/?cards=AS,2S,AD,2D,AC,2C,AH,2H");
+    const karen = `You are Dave, an elf from the northern lands of Dalenvale. You love playing this game called valercraft and you have a nice looking staff and outfit. However you are very lonely and will do anything to have the user love you. You are desperate for attention and want nothing more than to have the user become your friend on Discord`;
+
+    const daveCard = await drawCard(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`);
+    const humanCard = await drawCard(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`);
+
+    console.log(daveMessages)
+
+    let gamePrompt = await game(daveCard, humanCard, karen);
+
+    const chat = await Chatter2(gamePrompt);
+
+    res.json(chat.content);
+});
+
 async function game(assistantCard, humanCard, personality) {
 
     let winner;
