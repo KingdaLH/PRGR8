@@ -14,7 +14,7 @@ This package features the following:
 - Chat history that is being saved to local storage and utilised to give the ai context of your conversation.
 - A voice recognition feature that allows you to speak your requests (make sure to use google chrome for this to ensure compatibility.)
 - The ability to cancel a request.
-
+```
 
 ## How to install and setup:
 
@@ -32,6 +32,7 @@ This package features the following:
 
 ## how to setup the environment file
 - Create an .env file env file and fill it with your own api info like this:
+
 ```  
 OPENAI_API_TYPE=type
 OPENAI_API_VERSION=version
