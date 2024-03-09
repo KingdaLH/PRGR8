@@ -147,6 +147,8 @@ async function addResponse(data, userInput) {
     bubbleWrapper.appendChild(userBubble);
 
     currentDiv.prepend(bubbleWrapper);
+    clearButton.style.display = 'inline-block';
+    clearButton.disabled = false;
 
 }
 
