@@ -49,10 +49,10 @@ async function drawCard(url) {
 
 app.post("/cat", async (req, res) => {
 
-    req.on('abort', () => {
+   ` req.on('abort', () => {
         console.log('Request aborted');
         res.json({ error: "Request aborted" });
-    });
+    });`
 
     const deckId = await shuffleDeck("https://www.deckofcardsapi.com/api/deck/new/shuffle/?cards=AH,2H,3H,4H,5H,6H,7H,8H,9C,10H,JH,QH,KH");
 
